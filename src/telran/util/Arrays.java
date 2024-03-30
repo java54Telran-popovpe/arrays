@@ -48,14 +48,14 @@ public class Arrays {
 	}
 	
 	public static <T> T[] search(T[] array, Predicate<T> predicate) {
-		return includeOfExcludeFilter(array, predicate, false);	
+		return includeOrExcludeFilter(array, predicate, false);	
 	}
 	
 	public static <T> T[] removeIf( T[] array, Predicate<T> predicate ) {
-		return includeOfExcludeFilter(array, predicate, true);
+		return includeOrExcludeFilter(array, predicate, true);
 	}
 	
-	private static <T> T[] includeOfExcludeFilter( T[] array, Predicate<T> predicate, boolean exclude) {
+	private static <T> T[] includeOrExcludeFilter( T[] array, Predicate<T> predicate, boolean exclude) {
 		T[] arrResult = java.util.Arrays.copyOf(array, array.length);
 		int index = 0;
 		for ( int i = 0; i < array.length; i++ ) {
@@ -86,11 +86,5 @@ public class Arrays {
 		if ( result < 0)
 			result = -leftIndex - 1;
 		return result;
-
 	}
-	
-	
-	
-	
-
 }
