@@ -14,6 +14,7 @@ public class Company implements Iterable<Employee>{
 	
 	public Company( Employee[] employees) {
 		this.employees  = Arrays.copy(employees);
+		Arrays.bubbleSort(this.employees, (a,b)-> a.compareTo(b));
 	}
 
 	@Override
