@@ -9,16 +9,7 @@ import telran.util.Arrays;
 public class Company implements Iterable<Employee>{
 	private Employee[] employees;
 	public void addEmployee( Employee employee ) {
-		int resultOfSearch = -1;
-		Comparator<Employee> cmp = (a,b) -> a.compareTo(b);
-		if ( ( resultOfSearch = Arrays.binarySearch(employees, employee, cmp) ) > -1 ) 
-			throw new IllegalStateException();
-		Employee[] result = new Employee[ employees.length + 1 ];
-		int pointOfInsert = -(resultOfSearch + 1);
-		java.lang.System.arraycopy(employees, 0, result, 0, pointOfInsert);
-		result[pointOfInsert] = employee;
-		java.lang.System.arraycopy(employees, pointOfInsert, result, pointOfInsert + 1, employees.length - pointOfInsert );
-		employees = result;
+		employees = Arrays.insertSorted(employees,  employee, (a,b)-> a.compareTo(b));
 	}
 	
 	public Company( Employee[] employees) {

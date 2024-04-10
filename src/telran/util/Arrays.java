@@ -4,6 +4,8 @@ package telran.util;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
+import telran.employees.Employee;
+
 public class Arrays {
 	public static <T> int indexOf( T[] array, T element) {
 		int i = 0;
@@ -51,6 +53,18 @@ public class Arrays {
 		bubbleSort( array, (a,b) -> a.compareTo(b));
 		return;
 	}
+	
+	public static <T> T[] insertSorted (T[] array, T element, Comparator<T> comp) {
+		int resultOfSearch = -1;
+		if ( ( resultOfSearch = Arrays.binarySearch(array, element, comp) ) > -1 ) 
+			throw new IllegalStateException();
+		T[] result =java.util.Arrays.copyOf(array, array.length + 1);;
+		int pointOfInsert = -(resultOfSearch + 1);
+		java.lang.System.arraycopy(array, 0, result, 0, pointOfInsert);
+		result[pointOfInsert] = element;
+		java.lang.System.arraycopy(array, pointOfInsert, result, pointOfInsert + 1, array.length - pointOfInsert );
+		return  result;
+	} 
 	
 	public static <T> T[] search(T[] array, Predicate<T> predicate) {
 		T[] arrResult = java.util.Arrays.copyOf(array, array.length);
