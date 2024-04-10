@@ -59,20 +59,14 @@ public class Company implements Iterable<Employee>{
 	}
 	
 	private class CompanyIterator implements Iterator<Employee> {
-		private Employee[] sortedArray;
 		private long current = 0;
 		@Override
 		public boolean hasNext() {
-			return current <= sortedArray.length - 1;
+			return current <= employees.length - 1;
 		}
-		public CompanyIterator() {
-			sortedArray = Arrays.copy( employees );
-			Arrays.bubbleSort( sortedArray );
-		}
-
 		@Override
 		public Employee next() {
-			Employee currentEmployee = sortedArray[(int) current++];
+			Employee currentEmployee = employees[(int) current++];
 			return new Employee(currentEmployee.getId(),currentEmployee.getBasicSalary(), currentEmployee.getDepartment());
 		}
 		
