@@ -47,32 +47,32 @@ public class Arrays {
 		}
 	}
 	
+	public static <T extends Comparable<T>> void bubbleSort( T[] array) {
+		bubbleSort( array, (a,b) -> a.compareTo(b));
+		return;
+	}
+	
 	public static <T> T[] search(T[] array, Predicate<T> predicate) {
-		return includeOrExcludeFilter(array, predicate, false);	
-	}
-	
-	public static <T> T[] removeIf( T[] array, Predicate<T> predicate ) {
-		return includeOrExcludeFilter(array, predicate, true);
-	}
-	
-	private static <T> T[] includeOrExcludeFilter( T[] array, Predicate<T> predicate, boolean exclude) {
 		T[] arrResult = java.util.Arrays.copyOf(array, array.length);
 		int index = 0;
 		for ( int i = 0; i < array.length; i++ ) {
-			if ( predicate.test(array[ i ]) ^ exclude) {
+			if ( predicate.test(array[ i ]) ) {
 				arrResult[ index++ ] = array[ i ];
 			}
 		}
 		return java.util.Arrays.copyOf(arrResult, index );
 	}
 	
+	public static <T> T[] removeIf( T[] array, Predicate<T> predicate ) {
+		return search(array, e -> !predicate.test(e));
+	}
 	
 	public static <T> int binarySearch( T[] array, T key, Comparator<T> comp){
 		int result = -1;
 		int leftIndex = 0;
 		int rightIndex = array.length - 1;
-		int middle = (leftIndex + rightIndex ) / 2;
 		while ( leftIndex <= rightIndex && result < 0) {
+			int middle = (leftIndex + rightIndex ) / 2;
 			int cmpResult = comp.compare(key, array[ middle ]);
 			if ( cmpResult == 0 ) {
 				result = middle;
@@ -86,5 +86,14 @@ public class Arrays {
 		if ( result < 0)
 			result = -leftIndex - 1;
 		return result;
+	}
+	public static <T> T[] add( T[] array, T element) {
+		T[] result = java.util.Arrays.copyOf(array, array.length + 1);
+		result[ array.length ] = element;
+		return result;
+	}
+	
+	public static <T> T[] copy(T[] array) {
+		return java.util.Arrays.copyOf(array, array.length);
 	}
 }

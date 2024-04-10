@@ -2,6 +2,8 @@ package telran.util.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Objects;
+
 import org.junit.jupiter.api.Test;
 
 import telran.util.Arrays;
@@ -28,6 +30,14 @@ class ArrayTests {
 		Integer[] expected = { 4, 8, 56, 100, 41, 23,-3,  -7 };
 		Integer[] numbersCopy = java.util.Arrays.copyOf(numbers, numbers.length);
 		Arrays.bubbleSort(numbersCopy, new EvenOddComparator());
+		assertArrayEquals(expected, numbersCopy);
+	}
+	
+	@Test
+	void bubbleSortNaturalTest() {
+		Integer[] expected = { -7, -3, 4, 8, 23, 41, 56, 100  };
+		Integer[] numbersCopy = java.util.Arrays.copyOf(numbers, numbers.length);
+		Arrays.bubbleSort(numbersCopy, Integer::compare);
 		assertArrayEquals(expected, numbersCopy);
 	}
 	@Test 
@@ -60,6 +70,60 @@ class ArrayTests {
 		key = 30;
 		assertEquals( java.util.Arrays.binarySearch(arrayForTest, key), Arrays.binarySearch(arrayForTest, key, Integer::compare));
 	}
-
-
+	
+	@Test
+	void addTest() {
+		Integer[] expected = { 100, -3, 23, 4, 8, 41, 56, -7, 150 };
+		assertArrayEquals(expected, Arrays.add(numbers, 150));
+	}
+	
+	@Test
+	void personsSortTest() {
+		Person person1 = new Person(123, 1985);
+		Person person2 = new Person(120, 2000);
+		Person person3 = new Person(128, 1999);
+		Person[] persons = { person1, person2, person3 };
+		Arrays.bubbleSort(persons);
+		Person[] expected = { new Person(120, 2000), new Person(123, 1985) ,  new Person(128, 1999) };
+		assertArrayEquals(expected, persons);
+		Person[] expectedAge = { 
+				new Person(120, 2000),
+				new Person(128, 1999),
+				new Person(123, 1985),
+		};
+		Arrays.bubbleSort(persons, (p1,p2) -> Integer.compare(p2.birthYear, p1.birthYear));
+		assertArrayEquals(expectedAge, persons);
+		
+	}
 }
+
+class Person implements Comparable<Person>{
+	long id;
+	int birthYear;
+	public Person(long id, int birthYear) {
+		this.id = id;
+		this.birthYear = birthYear;
+	}
+	@Override
+	public int compareTo(Person o) {
+		return Long.compare(id, o.id);
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(birthYear, id);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		return birthYear == other.birthYear && id == other.id;
+	}
+	
+	
+}
+
