@@ -4,7 +4,6 @@ package telran.util;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
-import telran.employees.Employee;
 
 public class Arrays {
 	public static <T> int indexOf( T[] array, T element) {
@@ -58,13 +57,17 @@ public class Arrays {
 		int resultOfSearch = -1;
 		if ( ( resultOfSearch = Arrays.binarySearch(array, element, comp) ) > -1 ) 
 			throw new IllegalStateException();
-		T[] result =java.util.Arrays.copyOf(array, array.length + 1);;
 		int pointOfInsert = -(resultOfSearch + 1);
-		java.lang.System.arraycopy(array, 0, result, 0, pointOfInsert);
-		result[pointOfInsert] = element;
-		java.lang.System.arraycopy(array, pointOfInsert, result, pointOfInsert + 1, array.length - pointOfInsert );
-		return  result;
+		return Arrays.insert(array, pointOfInsert, element);
+	
 	} 
+	public static <T> T[] insert (T[] array, int index, T element) {
+		T[] result =java.util.Arrays.copyOf(array, array.length + 1);;
+		java.lang.System.arraycopy(array, 0, result, 0, index);
+		result[index] = element;
+		java.lang.System.arraycopy(array, index, result, index + 1, array.length - index );
+		return result;
+	}
 	
 	public static <T> T[] search(T[] array, Predicate<T> predicate) {
 		T[] arrResult = java.util.Arrays.copyOf(array, array.length);

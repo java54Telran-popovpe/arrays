@@ -39,7 +39,10 @@ public class Employee implements Comparable<Employee>{
 	}
 
 	public String getDepartment() {
-		return department;
+		return new String(department);
+	}
+	public int computeSalary() {
+		return getBasicSalary();
 	}
 
 	public Employee(long id, int basicSalary, String department) {
