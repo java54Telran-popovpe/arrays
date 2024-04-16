@@ -3,16 +3,17 @@ package telran.shapes;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import telran.shapes.exceptions.ShapeAlreadyExistsException;
+import telran.shapes.exceptions.ShapeNotFoundException;
 import telran.util.Arrays;
 
 public class Canvas extends Shape implements Iterable<Shape> {
 	
-	private Shape[] shapes;
+	protected Shape[] shapes = new Shape[0];
 
 	
-	public Canvas( 	long id, Shape[] shapes ) {
+	public Canvas( 	long id ) {
 		super( id );
-		this.shapes = Arrays.copy( shapes );
 	}
 	@Override
 	public int perimeter() {
@@ -31,24 +32,28 @@ public class Canvas extends Shape implements Iterable<Shape> {
 	}
 	
 	public void addShape( Shape shape ) {
-		if ( this.id == shape.getId() || Arrays.indexOf(shapes, shape) > -1 )
-			throw new IllegalStateException( String.format( "Error adding shape ID %d: shape always exists", id ) );
+		if ( getIndexOfShapeByID(shape.id) > -1) 
+			throw new ShapeAlreadyExistsException( shape.id );
 		shapes = Arrays.add(shapes, shape);
 	}
 	
 	public Shape removeShape( long id ) {
-		int i = 0;
-		while( i < shapes.length && shapes[i].getId() != id ) {
-			i++;
-		};
-		if (i == shapes.length ) {
-			throw new NoSuchElementException( String.format("Error removing shape ID %d: shape not exists", id));
+		int removedElementIndex = getIndexOfShapeByID( id );
+		if ( removedElementIndex < 0 ) {
+			throw new ShapeNotFoundException(id);
 		}
-		Shape removedShape = shapes[i];
-		shapes = Arrays.removeIf(shapes, e -> e.getId() == id);
+		Shape removedShape  = shapes[removedElementIndex];
+		shapes = Arrays.removeIf(shapes, e -> e.id == id);
 		return removedShape;
 	}
 
+	private int getIndexOfShapeByID(long id) {
+		int i = 0;
+		while ( i < shapes.length && shapes[ i ].id != id) {
+			i++;
+		}
+		return i == shapes.length ? -1 : i;
+	}
 	@Override
 	public Iterator<Shape> iterator() {
 		return new CanvasIterator();

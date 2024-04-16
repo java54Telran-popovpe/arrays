@@ -121,6 +121,19 @@ class CompanyTest {
 		
 	}
 	
+	@Test
+	void testGetManagersWithMostFactor() {
+//		Manager employee3 = new Manager(ID3, SALARY2, DEPARTMENT1, FACTOR1);
+		assertArrayEquals(new Manager[] {employee3}, company.getManagersWithMostFactor());
+		Manager employee8 = new Manager(ID3+100, SALARY2, DEPARTMENT1, FACTOR1); 
+		company.addEmployee( employee8 );
+		assertArrayEquals(new Manager[] {employee3, employee8}, company.getManagersWithMostFactor());
+		company = new Company( new Employee[] {employee1});
+		assertEquals(0, company.getManagersWithMostFactor().length);
+		
+
+	}
+	
 	protected <T> T[] toArrayFromIterable( T[] array, Iterable<T> iterable) {
 		int index = 0;
 		for ( T obj: iterable ) {
