@@ -76,13 +76,14 @@ public class Company implements Iterable<Employee>{
 		}
 	}
 	 public Manager[] getManagersWithMostFactor() {
-		 Manager[] result = new Manager[0];
+		 
 		 Employee[] empManagers =  Arrays.search(employees, emp -> emp instanceof Manager);
-		 for ( Employee manager: empManagers )
-			 result = Arrays.add( result, (Manager)manager);
+		 Manager[] managers = new Manager[ empManagers.length];
+		 for ( int i = 0; i < empManagers.length; i++ )
+			 managers[ i ] = (Manager) empManagers[ i ];
 
-		 final float mostFactor = getMostFactor(result) ;
-		 return Arrays.search(result,  manager -> manager.getFactor() == mostFactor );
+		 final float mostFactor = getMostFactor(managers) ;
+		 return Arrays.search(managers,  manager -> manager.getFactor() == mostFactor );
 	 }
 	 
 	 private float getMostFactor( Manager[] managers) {
