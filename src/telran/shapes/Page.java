@@ -17,8 +17,7 @@ public class Page implements Iterable<Shape> {
 		}
 		shapes = Arrays.add(shapes, shape);
 	}
-	
-	
+		
 	public void addShape( long[] canvasIDs, Shape shape) {
 		Canvas canvas = getCanvas( canvasIDs );
 		canvas.addShape(shape);
@@ -33,7 +32,7 @@ public class Page implements Iterable<Shape> {
 	}
 
 	private Canvas getCanvasByID(Shape[] shapes, long id) {
-		int index = getIndexOfShapeByID( id, shapes);
+		int index = Arrays.indexOf( shapes, new Canvas(id));
 		if ( index < 0)
 			throw new ShapeNotFoundException(index);
 		Shape shape = shapes[index];
@@ -47,33 +46,26 @@ public class Page implements Iterable<Shape> {
 	}
 
 	public Shape removeShape( long id ) {
-		Shape removedShape = checkDeletionPossibility( id, shapes);
+		Shape removedShape = getShapeForDeletion( id, shapes);
 		shapes = Arrays.removeIf(shapes, e -> e.id == id);
 		return removedShape;
 	}
-	private Shape checkDeletionPossibility( long id, Shape[] shapes ) {
-		int removedElementIndex = getIndexOfShapeByID( id, shapes );
+	
+	public Shape removeShape( long[] canvasIDs, long id ) {
+		Canvas canvas = getCanvas( canvasIDs );
+		Shape removedShape = getShapeForDeletion( id, canvas.shapes );
+		canvas.shapes = Arrays.removeIf(canvas.shapes, e -> e.id == id);
+		return removedShape;
+	}
+	
+	private Shape getShapeForDeletion( long id, Shape[] shapes ) {
+		int removedElementIndex = Arrays.indexOf(shapes, new Canvas(id));
 		if ( removedElementIndex < 0 ) {
 			throw new ShapeNotFoundException(id);
 		}
 		return shapes[removedElementIndex];
 	}
-
-	private int getIndexOfShapeByID(long id, Shape[] shapes) {
-		int i = 0;
-		while ( i < shapes.length && shapes[ i ].id != id) {
-			i++;
-		}
-		return i == shapes.length ? -1 : i;
-	}
 	
-	public Shape removeShape( long[] canvasIDs, long id ) {
-		Canvas canvas = getCanvas( canvasIDs );
-		Shape removedShape = checkDeletionPossibility( id, canvas.shapes );
-		canvas.shapes = Arrays.removeIf(canvas.shapes, e -> e.id == id);
-		return removedShape;
-	}
-
 	@Override
 	public Iterator<Shape> iterator() {
 
