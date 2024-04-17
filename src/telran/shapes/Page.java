@@ -18,6 +18,7 @@ public class Page implements Iterable<Shape> {
 		shapes = Arrays.add(shapes, shape);
 	}
 	
+	
 	public void addShape( long[] canvasIDs, Shape shape) {
 		Canvas canvas = getCanvas( canvasIDs );
 		canvas.addShape(shape);
