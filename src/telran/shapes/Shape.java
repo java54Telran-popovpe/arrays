@@ -28,7 +28,7 @@ abstract public class Shape {
 			return true;
 		if (obj == null)
 			return false;
-		if ( obj.getClass() != getClass() )
+		if ( !(obj instanceof Shape) )
 			return false;
 		Shape other = (Shape) obj;
 		return id == other.id;
