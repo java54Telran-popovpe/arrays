@@ -9,7 +9,7 @@ import telran.util.Arrays;
 
 public class Canvas extends Shape implements Iterable<Shape> {
 	
-	protected Shape[] shapes = new Shape[0];
+	protected ShapeContainer shapeContainer = new ShapeContainer();
 
 	
 	public Canvas( 	long id ) {
@@ -18,7 +18,7 @@ public class Canvas extends Shape implements Iterable<Shape> {
 	@Override
 	public int perimeter() {
 		int result = 0;
-		for ( Shape shape: shapes )
+		for ( Shape shape: shapeContainer )
 			result += shape.perimeter();
 		return result;
 	}
@@ -26,53 +26,22 @@ public class Canvas extends Shape implements Iterable<Shape> {
 	@Override
 	public int square() {
 		int result = 0;
-		for ( Shape shape: shapes )
+		for ( Shape shape: shapeContainer )
 			result += shape.square();
 		return result;
 	}
 	
 	public void addShape( Shape shape ) {
-		if ( getIndexOfShapeByID(shape.id) > -1) 
-			throw new ShapeAlreadyExistsException( shape.id );
-		shapes = Arrays.add(shapes, shape);
+		shapeContainer.addShape(shape);
 	}
 	
 	public Shape removeShape( long id ) {
-		int removedElementIndex = getIndexOfShapeByID( id );
-		if ( removedElementIndex < 0 ) {
-			throw new ShapeNotFoundException(id);
-		}
-		Shape removedShape  = shapes[removedElementIndex];
-		shapes = Arrays.removeIf(shapes, e -> e.id == id);
-		return removedShape;
+		return shapeContainer.removeShape(id);
 	}
 
-	private int getIndexOfShapeByID(long id) {
-		int i = 0;
-		while ( i < shapes.length && shapes[ i ].id != id) {
-			i++;
-		}
-		return i == shapes.length ? -1 : i;
-	}
 	@Override
 	public Iterator<Shape> iterator() {
-		return new CanvasIterator();
+		return shapeContainer.iterator();
 	}
 	
-	private class CanvasIterator implements Iterator<Shape> {
-		int current = 0;
-		@Override
-		public boolean hasNext() {
-			return current < shapes.length;
-		}
-
-		@Override
-		public Shape next() {
-			if ( !hasNext()) 
-				throw new NoSuchElementException();
-			return shapes[current++];
-		}
-		
-	}
-		
 }
